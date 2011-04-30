@@ -48,7 +48,7 @@ bool Map::Load( string file, Player *player, MainCharacter *mainc )
 					NPC *npc = new NPC();
 					npc->location = Coord( x, y );
 					npc->sign = 'm';
-					npc->AIFunction = StationaryNPCAI;
+					npc->AIFunction = FollowPlayerAI;
 					npcs.push_back( npc );
 					tmp->sign = '.';
 			}

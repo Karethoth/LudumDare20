@@ -19,3 +19,20 @@ void StationaryNPCAI( NPC *me )
 {
 }
 
+
+void FollowPlayerAI( NPC *me )
+{
+	// Very buggy, usually just blocks player
+	Coord tgt = player->location;
+	// A hack to make this work.
+	player->location = Coord( 0, 0 );
+	Direction d = NextMove( me->location, tgt );
+	Coord next = DirectionToCoord( me->location, d );
+	
+	if( next.x != tgt.x || next.y != tgt.y )
+	{
+		me->location = next;
+	}
+	player->location = tgt;
+}
+

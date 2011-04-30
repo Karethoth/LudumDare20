@@ -133,6 +133,14 @@ void Update( int input )
 				player->location = newCoord;
 	}
 	mainCharacter->AIFunction( mainCharacter );
+
+	vector<NPC*>::iterator e;
+	for( e = map.npcs.begin();
+			 e != map.npcs.end();
+			 e++ )
+	{
+		(*e)->AIFunction( (*e) );
+	}
 }
 
 
