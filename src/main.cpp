@@ -2,6 +2,7 @@
 #include <ncurses.h>
 
 #include "messagebox.hpp"
+#include "map.hpp"
 #include "player.hpp"
 
 using std::string;
@@ -13,6 +14,7 @@ using std::string;
 WINDOW *window;
 Player *player;
 Coord  screenSize;
+Map    map;
 
 
 void Intro()
@@ -27,6 +29,8 @@ void Intro()
 	wrefresh( msgBox.window );
 	wgetstr( msgBox.window, buffer );
 	player->name = string( buffer );
+	curs_set( 0 );
+	noecho();
 }
 
 
@@ -35,6 +39,7 @@ int main( int argc, char **argv )
 {
 	initscr();
 	noecho();
+	curs_set( 0 );
 
 	player = new Player();
 
@@ -52,8 +57,13 @@ int main( int argc, char **argv )
 	wprintw( messageBox.window, "Hello %s!", player->name.c_str() );
 	wrefresh( messageBox.window );
 
-	mvwprintw( window, 0, 1, "Content goes here!" );
+	if( !map.Load( "map.dat" ) )
+			std::cout << "Couldn't load the map!";
+
+	map.Draw( window, Coord( 0, 0 ) );
+
 	wrefresh( window );
+	move( screenSize.y-1, screenSize.x-1 );
 
 
 	getch();
