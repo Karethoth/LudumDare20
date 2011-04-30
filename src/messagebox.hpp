@@ -11,10 +11,8 @@ using std::string;
 
 class MessageBox
 {
- private:
-	WINDOW *window;
-
  public: // No time to play with getters and setters.
+	WINDOW *window;
 	Coord location;
 	Coord size;
 

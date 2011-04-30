@@ -19,6 +19,5 @@ void MessageBox::Draw()
 	}
 
 	mvwprintw( window, 1, 1, message.c_str() );
-	wrefresh( window );
 }
 
