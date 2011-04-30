@@ -43,6 +43,14 @@ bool Map::Load( string file, Player *player, MainCharacter *mainc )
 					mainc->location = Coord( x, y );
 					tmp->sign = '.';
 			}
+			else if( c == 'm' )
+			{
+					NPC *npc = new NPC();
+					npc->location = Coord( x, y );
+					npc->sign = 'm';
+					npcs.push_back( npc );
+					tmp->sign = '.';
+			}
 
 			if( tmp->sign == '.' )
 			{
@@ -73,37 +81,4 @@ void Map::Draw( WINDOW *window, Coord offset )
 	}
 }
 
-
-
-bool Map::IsMovable( Coord tgt )
-{
-	bool isMovable = true;
-	vector<Tile*>::iterator t;
-	for( t = tiles.begin();
-			 t != tiles.end();
-			 t++ )
-	{
-		if( (*t)->location.x == tgt.x &&
-				(*t)->location.y == tgt.y )
-			if( !(*t)->walkable )
-			{
-				isMovable = false;
-				break;
-			}
-	}
-	
-	vector<Entity*>::iterator e;
-	for( e = entities.begin();
-			 e != entities.end();
-			 e++ )
-	{
-		if( (*e)->location.x == tgt.x &&
-				(*e)->location.y == tgt.y )
-		{
-			isMovable = false;
-			break;
-		}
-	}
-	return isMovable;
-}
 

@@ -5,6 +5,7 @@
 #include "map.hpp"
 #include "player.hpp"
 #include "maincharacter.hpp"
+#include "ai.hpp"
 
 using std::string;
 
@@ -17,6 +18,39 @@ Player *player;
 MainCharacter *mainCharacter;
 Coord  screenSize;
 Map    map;
+
+
+bool IsMovable( Coord tgt )
+{
+	bool isMovable = true;
+	vector<Tile*>::iterator t;
+	for( t = map.tiles.begin();
+			 t != map.tiles.end();
+			 t++ )
+	{
+		if( (*t)->location.x == tgt.x &&
+				(*t)->location.y == tgt.y )
+			if( !(*t)->walkable )
+			{
+				isMovable = false;
+				break;
+			}
+	}
+	
+	vector<NPC*>::iterator e;
+	for( e = map.npcs.begin();
+			 e != map.npcs.end();
+			 e++ )
+	{
+		if( (*e)->location.x == tgt.x &&
+				(*e)->location.y == tgt.y )
+		{
+			isMovable = false;
+			break;
+		}
+	}
+	return isMovable;
+}
 
 
 void Intro()
@@ -87,11 +121,12 @@ Coord DirectionToCoord( Coord cur, Direction d )
 
 void Update( int input )
 {
+	mainCharacter->AIFunction( mainCharacter );
 	Direction d = KeyToDirection( input );
 	if( d != invalid )
 	{
 		Coord newCoord = DirectionToCoord( player->location, d );
-		if( map.IsMovable( newCoord ) )
+		if( IsMovable( newCoord ) )
 				player->location = newCoord;
 	}
 }
@@ -127,7 +162,8 @@ int main( int argc, char **argv )
 	if( !map.Load( string("map.dat"), player, mainCharacter ) )
 			std::cout << "Couldn't load the map!";
 
-	map.entities.push_back( (Entity*)mainCharacter );
+	mainCharacter->AIFunction = MainCharacterAI;
+	map.npcs.push_back( (NPC*)mainCharacter );
 
 	while( true )
 	{

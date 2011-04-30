@@ -12,7 +12,8 @@ class NPC : public Entity
 	bool hostile;
 	bool AIEnabled;
 
-	//void (*AIFunction)();
+	bool (*IsMovable)( Coord );
+	void (*AIFunction)( NPC* );
 
 	//NPCType type;
 };

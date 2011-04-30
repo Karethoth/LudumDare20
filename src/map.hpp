@@ -11,20 +11,23 @@
 #include "tile.hpp"
 #include "entity.hpp"
 #include "player.hpp"
+#include "npc.hpp"
 #include "maincharacter.hpp"
+#include "ai.hpp"
 
 using std::string;
 using std::vector;
+
+extern bool IsMovable( Coord );
 
 
 class Map
 {
  public:
-	vector<Tile*>   tiles;
-	vector<Entity*> entities;
+	vector<Tile*> tiles;
+	vector<NPC*>  npcs;
 
 	bool Load( string file, Player *player, MainCharacter *mainc );
-	bool IsMovable( Coord tgt );
 
 	void Draw( WINDOW *window, Coord offset );
 
