@@ -7,7 +7,7 @@
 class NPC : public Entity
 {
  public:
-	virtual ~NPC();
+	virtual ~NPC(){};
 
 	bool hostile;
 	bool AIEnabled;

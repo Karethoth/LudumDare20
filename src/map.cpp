@@ -21,7 +21,7 @@ Map::~Map()
 
 
 
-bool Map::Load( string file )
+bool Map::Load( string file, Player *player, MainCharacter *mainc )
 {
 	std::ifstream f;
 	f.open( file.c_str(), std::ios::in );
@@ -40,6 +40,16 @@ bool Map::Load( string file )
 			Tile *tmp = new Tile();
 			tmp->location = Coord( x, y );
 			tmp->sign = c;
+			if( c == 'c' )
+			{
+					player->location = Coord( x, y );
+					tmp->sign = '.';
+			}
+			else if( c == '@' )
+			{
+					mainc->location = Coord( x, y );
+					tmp->sign = '.';
+			}
 			tiles.push_back( tmp );
 		}
 		y++;

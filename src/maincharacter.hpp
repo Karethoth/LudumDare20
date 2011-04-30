@@ -5,7 +5,8 @@
 
 class MainCharacter : public NPC
 {
-
+ public:
+	~MainCharacter();
 };
 
 #endif

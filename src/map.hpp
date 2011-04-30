@@ -10,6 +10,8 @@
 #include "coord.hpp"
 #include "tile.hpp"
 #include "entity.hpp"
+#include "player.hpp"
+#include "maincharacter.hpp"
 
 using std::string;
 using std::vector;
@@ -21,7 +23,7 @@ class Map
 	vector<Tile*>   tiles;
 	vector<Entity*> entities;
 
-	bool Load( string file );
+	bool Load( string file, Player *player, MainCharacter *mainc );
 	bool IsMovable( unsigned int x, unsigned int y );
 
 	void Draw( WINDOW *window, Coord offset );
