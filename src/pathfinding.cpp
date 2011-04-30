@@ -1,10 +1,16 @@
 #include "pathfinding.hpp"
 
+int _abs( int a )
+{
+	if( a < 0 )
+		return 0-a;
+	return a;
+}
 
 int Heuristic( Coord a, Coord b )
 {
-	int A = abs( b.x - a.x );
-	int B = abs( b.y - b.y );
+	int A = _abs( b.x - a.x );
+	int B = _abs( b.y - b.y );
 	return A+B;
 }
 

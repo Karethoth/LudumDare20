@@ -2,7 +2,6 @@
 #define _PATHFINDING_HPP_
 
 #include <vector>
-#include <cmath>
 
 #include "enums.hpp"
 #include "coord.hpp"
