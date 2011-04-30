@@ -66,9 +66,34 @@ Direction KeyToDirection( int key )
 
 
 
+Coord DirectionToCoord( Coord cur, Direction d )
+{
+	if( d == north )
+		cur.y--;
+
+	else if( d == east )
+		cur.x++;
+
+	else if( d == south )
+		cur.y++;
+
+	else if( d == west )
+		cur.x--;
+
+	return cur;
+}
+
+
+
 void Update( int input )
 {
 	Direction d = KeyToDirection( input );
+	if( d != invalid )
+	{
+		Coord newCoord = DirectionToCoord( player->location, d );
+		if( map.IsMovable( newCoord ) )
+				player->location = newCoord;
+	}
 }
 
 

@@ -39,6 +39,7 @@ bool Map::Load( string file, Player *player, MainCharacter *mainc )
 			c = line[x];
 			Tile *tmp = new Tile();
 			tmp->location = Coord( x, y );
+			tmp->walkable = false;
 			tmp->sign = c;
 			if( c == 'c' )
 			{
@@ -50,6 +51,12 @@ bool Map::Load( string file, Player *player, MainCharacter *mainc )
 					mainc->location = Coord( x, y );
 					tmp->sign = '.';
 			}
+
+			if( tmp->sign == '.' )
+			{
+					tmp->walkable = true;
+			}
+
 			tiles.push_back( tmp );
 		}
 		y++;
@@ -72,5 +79,26 @@ void Map::Draw( WINDOW *window, Coord offset )
 												curTile->location.x+1+offset.x,
 												curTile->sign );
 	}
+}
+
+
+
+bool Map::IsMovable( Coord tgt )
+{
+	bool isMovable = true;
+	vector<Tile*>::iterator t;
+	for( t = tiles.begin();
+			 t != tiles.end();
+			 t++ )
+	{
+		if( (*t)->location.x == tgt.x &&
+				(*t)->location.y == tgt.y )
+			if( !(*t)->walkable )
+			{
+				isMovable = false;
+				break;
+			}
+	}
+	return isMovable;
 }
 

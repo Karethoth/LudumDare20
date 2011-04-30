@@ -24,7 +24,7 @@ class Map
 	vector<Entity*> entities;
 
 	bool Load( string file, Player *player, MainCharacter *mainc );
-	bool IsMovable( unsigned int x, unsigned int y );
+	bool IsMovable( Coord tgt );
 
 	void Draw( WINDOW *window, Coord offset );
 
