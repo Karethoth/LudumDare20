@@ -22,7 +22,6 @@ Map    map;
 
 bool IsMovable( Coord tgt )
 {
-	bool isMovable = true;
 	vector<Tile*>::iterator t;
 	for( t = map.tiles.begin();
 			 t != map.tiles.end();
@@ -32,7 +31,7 @@ bool IsMovable( Coord tgt )
 				(*t)->location.y == tgt.y )
 			if( !(*t)->walkable )
 			{
-				isMovable = false;
+				return false;
 				break;
 			}
 	}
@@ -45,11 +44,15 @@ bool IsMovable( Coord tgt )
 		if( (*e)->location.x == tgt.x &&
 				(*e)->location.y == tgt.y )
 		{
-			isMovable = false;
+			return false;
 			break;
 		}
 	}
-	return isMovable;
+
+	if( player->location.x == tgt.x &&
+			player->location.y == tgt.y )
+		return false;
+	return true;
 }
 
 
@@ -121,7 +124,6 @@ Coord DirectionToCoord( Coord cur, Direction d )
 
 void Update( int input )
 {
-	mainCharacter->AIFunction( mainCharacter );
 	Direction d = KeyToDirection( input );
 	if( d != invalid )
 	{
@@ -129,6 +131,7 @@ void Update( int input )
 		if( IsMovable( newCoord ) )
 				player->location = newCoord;
 	}
+	mainCharacter->AIFunction( mainCharacter );
 }
 
 
@@ -163,6 +166,7 @@ int main( int argc, char **argv )
 			std::cout << "Couldn't load the map!";
 
 	mainCharacter->AIFunction = MainCharacterAI;
+	mainCharacter->sign = '@';
 	map.npcs.push_back( (NPC*)mainCharacter );
 
 	while( true )
@@ -174,12 +178,6 @@ int main( int argc, char **argv )
 		mvwaddch( window, player->location.y,
 											player->location.x+1,
 											'c' );
-
-		attron( COLOR_PAIR( 1 ) );
-		mvwaddch( window, mainCharacter->location.y,
-											mainCharacter->location.x+1,
-											'@' );
-		attroff( COLOR_PAIR( 1 ) );
 
 		wrefresh( window );
 		move( screenSize.y-1, screenSize.x-1 );

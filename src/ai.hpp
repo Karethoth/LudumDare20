@@ -9,6 +9,7 @@ extern Coord DirectionToCoord( Coord, Direction );
 extern bool IsMovable( Coord );
 
 void MainCharacterAI( NPC *me );
+void StationaryNPCAI( NPC *me );
 
 #endif
 

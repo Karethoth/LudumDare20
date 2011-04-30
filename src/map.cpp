@@ -48,6 +48,7 @@ bool Map::Load( string file, Player *player, MainCharacter *mainc )
 					NPC *npc = new NPC();
 					npc->location = Coord( x, y );
 					npc->sign = 'm';
+					npc->AIFunction = StationaryNPCAI;
 					npcs.push_back( npc );
 					tmp->sign = '.';
 			}
@@ -78,6 +79,16 @@ void Map::Draw( WINDOW *window, Coord offset )
 			mvwaddch( window, curTile->location.y+offset.y,
 												curTile->location.x+1+offset.x,
 												curTile->sign );
+	}
+
+	vector<NPC*>::iterator e;
+	for( e = npcs.begin();
+			 e != npcs.end();
+			 e++ )
+	{
+		mvwaddch( window, (*e)->location.y+offset.y,
+						          (*e)->location.x+1+offset.x,
+											(*e)->sign );
 	}
 }
 

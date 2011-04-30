@@ -10,7 +10,14 @@ void MainCharacterAI( NPC *me )
 		me->location = tgt;
 	else
 	{
-		me->location = DirectionToCoord( me->location, north );
+		tgt = DirectionToCoord( me->location, north );
+		if( IsMovable( tgt ) )
+			me->location = DirectionToCoord( me->location, north );
 	}
 }
 
+
+
+void StationaryNPCAI( NPC *me )
+{
+}
