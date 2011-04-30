@@ -1,8 +1,15 @@
 #include <iostream>
+#include <ncurses.h>
+
+WINDOW *window;
 
 int main( int argc, char **argv )
 {
-	std::cout << "It works!\n";
+	window = initscr();
+	printw( "It works!" );
+	refresh();
+	getch();
+	endwin();
 	return 0;
 }
 
