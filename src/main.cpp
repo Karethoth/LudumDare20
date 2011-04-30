@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ncurses.h>
+#include <ctime>
 
 #include "messagebox.hpp"
 #include "map.hpp"
@@ -147,6 +148,8 @@ void Update( int input )
 
 int main( int argc, char **argv )
 {
+	// New seed
+	srand( time( NULL ) );
 	initscr();
 	noecho();
 	curs_set( 0 );

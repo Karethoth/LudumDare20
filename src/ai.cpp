@@ -32,7 +32,17 @@ void FollowPlayerAI( NPC *me )
 	if( next.x != tgt.x || next.y != tgt.y )
 	{
 		me->location = next;
+		player->location = tgt;
 	}
-	player->location = tgt;
+	else
+	{
+		player->location = tgt;
+		vector<Coord> neighbours = Neighbours( me->location );
+		int max = neighbours.size();
+		if( max == 0 )
+			max = 1;
+		int next = rand() % max;
+		me->location = neighbours.at( next );
+	}
 }
 
