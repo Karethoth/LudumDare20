@@ -9,14 +9,6 @@ Map::~Map()
 	{
 		delete *t;
 	}
-
-	vector<Entity*>::iterator e;
-	for( e = entities.begin();
-			 e != entities.end();
-			 e++ )
-	{
-		delete *e;
-	}
 }
 
 
@@ -98,6 +90,19 @@ bool Map::IsMovable( Coord tgt )
 				isMovable = false;
 				break;
 			}
+	}
+	
+	vector<Entity*>::iterator e;
+	for( e = entities.begin();
+			 e != entities.end();
+			 e++ )
+	{
+		if( (*e)->location.x == tgt.x &&
+				(*e)->location.y == tgt.y )
+		{
+			isMovable = false;
+			break;
+		}
 	}
 	return isMovable;
 }

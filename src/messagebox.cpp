@@ -17,7 +17,17 @@ void MessageBox::Draw()
 	{
 			return;
 	}
-
+	wclear( window );
 	mvwprintw( window, 1, 1, message.c_str() );
+	wborder( window, '|', '|', '-', '-', '+', '+', '+', '+' );
 }
 
+
+
+void MessageBox::Clear()
+{
+	message = "";
+	wclear( window );
+	wborder( window, '|', '|', '-', '-', '+', '+', '+', '+' );
+	wrefresh( window );
+}

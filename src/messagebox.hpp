@@ -11,15 +11,16 @@ using std::string;
 
 class MessageBox
 {
- public: // No time to play with getters and setters.
+ public:
 	WINDOW *window;
 	Coord location;
 	Coord size;
 
+	void Init( Coord, Coord );
+
 	string message;
 	void Draw();
-
-	void Init( Coord Location, Coord Size );
+	void Clear();
 };
 
 #endif

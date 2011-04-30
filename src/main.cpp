@@ -124,8 +124,12 @@ int main( int argc, char **argv )
 	if( !map.Load( string("map.dat"), player, mainCharacter ) )
 			std::cout << "Couldn't load the map!";
 
+	map.entities.push_back( (Entity*)mainCharacter );
+
 	while( true )
 	{
+		wrefresh( messageBox.window );
+
 		map.Draw( window, Coord( 0, 0 ) );
 
 		mvwaddch( window, player->location.y,
