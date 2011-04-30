@@ -1,6 +1,7 @@
 #ifndef _PATHFINDING_HPP_
 #define _PATHFINDING_HPP_
 
+#include <cstdlib>
 #include <vector>
 
 #include "enums.hpp"

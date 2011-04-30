@@ -18,17 +18,35 @@ vector<Coord> Neighbours( Coord a )
 {
 	vector<Coord> neighbours;
 
-	if( IsMovable( Coord( a.x, a.y+1 ) ) )
-		neighbours.push_back( Coord( a.x, a.y+1 ) );
+	// Just to make it a bit random
+	if( rand() % 1 )
+	{
+		if( IsMovable( Coord( a.x, a.y+1 ) ) )
+			neighbours.push_back( Coord( a.x, a.y+1 ) );
 
-	if( IsMovable( Coord( a.x, a.y-1 ) ) )
-		neighbours.push_back( Coord( a.x, a.y-1 ) );
+		if( IsMovable( Coord( a.x, a.y-1 ) ) )
+			neighbours.push_back( Coord( a.x, a.y-1 ) );
 
-	if( IsMovable( Coord( a.x+1, a.y ) ) )
-		neighbours.push_back( Coord( a.x+1, a.y ) );
+		if( IsMovable( Coord( a.x+1, a.y ) ) )
+			neighbours.push_back( Coord( a.x+1, a.y ) );
 
-	if( IsMovable( Coord( a.x-1, a.y ) ) )
-		neighbours.push_back( Coord( a.x-1, a.y ) );
+		if( IsMovable( Coord( a.x-1, a.y ) ) )
+			neighbours.push_back( Coord( a.x-1, a.y ) );
+	}
+	else
+	{
+		if( IsMovable( Coord( a.x+1, a.y ) ) )
+			neighbours.push_back( Coord( a.x+1, a.y ) );
+
+		if( IsMovable( Coord( a.x-1, a.y ) ) )
+			neighbours.push_back( Coord( a.x-1, a.y ) );
+
+		if( IsMovable( Coord( a.x, a.y-1 ) ) )
+			neighbours.push_back( Coord( a.x, a.y-1 ) );
+
+		if( IsMovable( Coord( a.x, a.y+1 ) ) )
+			neighbours.push_back( Coord( a.x, a.y+1 ) );
+	}
 
 	return neighbours;
 }
