@@ -167,7 +167,7 @@ int main( int argc, char **argv )
 	messageBox.Init( Coord(0,0), Coord( screenSize.x, MESSAGEBOX_HEIGHT ) );
 	refresh();
 	messageBox.Draw();
-	wprintw( messageBox.window, "You're now the companion of the main character!\n|Protect him!" );
+	wprintw( messageBox.window, "You're now the companion of the main character!\n|Protect him! Use h,j,k,l keys to move!" );
 	wrefresh( messageBox.window );
 
 	if( !map.Load( string("map.dat"), player, mainCharacter ) )
