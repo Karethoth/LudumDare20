@@ -104,6 +104,9 @@ int main( int argc, char **argv )
 	noecho();
 	curs_set( 0 );
 
+	start_color();
+	init_pair( 1, COLOR_GREEN, COLOR_BLACK );
+
 	player = new Player();
 	mainCharacter = new MainCharacter();
 
@@ -136,9 +139,11 @@ int main( int argc, char **argv )
 											player->location.x+1,
 											'c' );
 
+		attron( COLOR_PAIR( 1 ) );
 		mvwaddch( window, mainCharacter->location.y,
 											mainCharacter->location.x+1,
 											'@' );
+		attroff( COLOR_PAIR( 1 ) );
 
 		wrefresh( window );
 		move( screenSize.y-1, screenSize.x-1 );
