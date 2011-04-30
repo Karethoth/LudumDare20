@@ -4,6 +4,7 @@
 #include "entity.hpp"
 #include "npc.hpp"
 #include "map.hpp"
+#include "pathfinding.hpp"
 
 extern Coord DirectionToCoord( Coord, Direction );
 extern bool IsMovable( Coord );

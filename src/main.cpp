@@ -18,6 +18,7 @@ Player *player;
 MainCharacter *mainCharacter;
 Coord  screenSize;
 Map    map;
+MessageBox messageBox;
 
 
 bool IsMovable( Coord tgt )
@@ -155,7 +156,6 @@ int main( int argc, char **argv )
 	box( window, 0, 0 );
 	wborder( window, '|', '|', ' ', '-', '|', '|', '+', '+' );
 
-	MessageBox messageBox;
 	messageBox.Init( Coord(0,0), Coord( screenSize.x, MESSAGEBOX_HEIGHT ) );
 	refresh();
 	messageBox.Draw();

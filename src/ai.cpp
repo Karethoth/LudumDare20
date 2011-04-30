@@ -5,14 +5,11 @@ void MainCharacterAI( NPC *me )
 {
 	Coord tgt;
 
-	tgt = DirectionToCoord( me->location, south );
-	if( IsMovable( tgt ) )
-		me->location = tgt;
-	else
+	if( me->location.x != 1 ||
+			me->location.y != 1 )
 	{
-		tgt = DirectionToCoord( me->location, north );
-		if( IsMovable( tgt ) )
-			me->location = DirectionToCoord( me->location, north );
+		Direction d = NextMove( me->location, Coord( 1, 1 ) );
+		me->location = DirectionToCoord( me->location, d );
 	}
 }
 
@@ -21,3 +18,4 @@ void MainCharacterAI( NPC *me )
 void StationaryNPCAI( NPC *me )
 {
 }
+
