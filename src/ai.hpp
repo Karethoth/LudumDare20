@@ -1,6 +1,8 @@
 #ifndef _AI_HPP_
 #define _AI_HPP_
 
+#include <cstdlib>
+
 #include "entity.hpp"
 #include "npc.hpp"
 #include "map.hpp"

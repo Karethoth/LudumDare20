@@ -60,7 +60,6 @@ bool IsMovable( Coord tgt )
 
 void Intro()
 {
-	char buffer[80];
 	MessageBox msgBox;
 	msgBox.Init( Coord( 0, 0 ), screenSize );
 	echo();
