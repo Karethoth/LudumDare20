@@ -19,5 +19,15 @@ enum NPCType
 	monster
 };
 
+
+enum GameState
+{
+	stopped=0,
+	intro,
+	mainGame,
+	endGame,
+	outro
+};
+
 #endif
 

@@ -21,6 +21,45 @@ Coord  screenSize;
 Map    map;
 MessageBox messageBox;
 bool gameOver = false;
+GameState gameState = intro;
+int round = 0;
+bool spawned = false;
+
+
+
+int IntroOver()
+{
+	// messages here
+	// open the path
+	map.OpenDoors();
+	// moar messages
+	// continue
+	mainCharacter->goal = map.mainCharacterPath[1];
+	return 1;
+}
+
+
+
+int StartMainGame()
+{
+	if( player->location.y > mainCharacter->location.y )
+	{
+		// messages..
+		map.CloseDoors();
+		// messages..
+		// continue
+		gameState = mainGame;
+		round = 1;
+		return 1;
+	}
+	else
+	{
+		// message
+	  messageBox.message = "";
+	  messageBox.Draw();
+	}
+	return 0;
+}
 
 
 
@@ -75,6 +114,22 @@ bool IsMovable( Coord tgt )
 	if( player->location.x == tgt.x &&
 			player->location.y == tgt.y )
 		return false;
+
+	if( !map.doorsOpen )
+	{
+		vector<Coord>::iterator d;
+		for( d = map.doors.begin();
+				 d != map.doors.end();
+				 d++ )
+		{
+			if( (*d).x == tgt.x &&
+					(*d).y == tgt.y )
+			{
+				return false;
+				break;
+			}
+		}
+	}
 	return true;
 }
 
@@ -84,14 +139,10 @@ void Intro()
 {
 	MessageBox msgBox;
 	msgBox.Init( Coord( 0, 0 ), screenSize );
-	echo();
-	refresh();
 	msgBox.message = "\"It's dangerous to go alone. Take this.\"";
 	msgBox.Draw();
 	wrefresh( msgBox.window );
 	getch();
-	curs_set( 0 );
-	noecho();
 }
 
 
@@ -182,9 +233,6 @@ void Update( int input )
 				player->location = newCoord;
 	}
 
-	if( mainCharacter )
-		mainCharacter->AIFunction( mainCharacter );
-
 	vector<NPC*>::iterator e;
 	for( e = map.npcs.begin();
 			 e < map.npcs.end();
@@ -226,6 +274,12 @@ void Update( int input )
 	{
 		EndGame();
 	}
+
+	if( round && !spawned )
+	{
+		map.SpawnMonsters( 3 );
+		spawned = true;
+	}
 }
 
 
@@ -261,9 +315,14 @@ int main( int argc, char **argv )
 	wrefresh( messageBox.window );
 
 	if( !map.Load( string("map.dat"), player, mainCharacter ) )
-			std::cout << "Couldn't load the map!";
+	{
+		std::cout << "Couldn't load the map!";
+		endwin();
+		return 1;
+	}
 
 	mainCharacter->name = "Hero";
+	mainCharacter->goal = map.mainCharacterPath[0];
 	mainCharacter->AIFunction = MainCharacterAI;
 	mainCharacter->sign = '@';
 	map.npcs.push_back( (NPC*)mainCharacter );

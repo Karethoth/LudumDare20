@@ -6,7 +6,9 @@
 class MainCharacter : public NPC
 {
  public:
+	MainCharacter();
 	~MainCharacter();
+	int waypoint;
 };
 
 #endif

@@ -12,9 +12,9 @@ class NPC : public Entity
 
 	bool hostile;
 	NPCType type;
+	int waypoint;
 
 	void (*AIFunction)( NPC* );
-
 	void Die();
 };
 

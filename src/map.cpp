@@ -51,42 +51,66 @@ bool Map::Load( string file, Player *player, MainCharacter *mainc )
 			tmp->sign = c;
 			if( c == 'c' )
 			{
-					player->location = Coord( x, y );
-					tmp->sign = '.';
+				player->location = Coord( x, y );
+				tmp->sign = '.';
 			}
 			else if( c == '@' )
 			{
-					mainc->type = hero;
-					mainc->location = Coord( x, y );
-					tmp->sign = '.';
+				mainc->type = hero;
+				mainc->location = Coord( x, y );
+				tmp->sign = '.';
+			}
+			else if( c == 'K' )
+			{
+				NPC *npc = new NPC();
+				npc->name = "King";
+				npc->location = Coord( x, y );
+			  npc->sign = 'K';
+				npc->hostile = false;
+				npc->alive = true;
+				npc->AIFunction = StationaryNPCAI;
+				npcs.push_back( npc );
+				tmp->sign = '.';
 			}
 			else if( c == 'm' )
 			{
-					NPC *npc = new NPC();
-					npc->name = "Monk";
-					npc->location = Coord( x, y );
-					npc->sign = 'm';
-					npc->hostile = false;
-					npc->alive = true;
-					npc->AIFunction = FollowPlayerAI;
-					npcs.push_back( npc );
-					tmp->sign = '.';
+				NPC *npc = new NPC();
+				npc->name = "Monk";
+				npc->location = Coord( x, y );
+			  npc->sign = 'm';
+				npc->hostile = false;
+				npc->alive = true;
+				npc->AIFunction = FollowPlayerAI;
+				npcs.push_back( npc );
+				tmp->sign = '.';
 			}
 			else if( c == 'e' )
 			{
-					NPC *npc = new NPC();
-					npc->name = "Monster";
-					npc->location = Coord( x, y );
-					npc->sign = 'e';
-					npc->hostile = true;
-					npc->alive = true;
-					npc->AIFunction = MonsterAI;
-					npcs.push_back( npc );
-					tmp->sign = '.';
+				tmp->sign = '.';
 			}
-			else if( c == '!' )
+			else if( c == 'E' )
 			{
-				mainc->goal = Coord( x, y );
+				monsterSpawns.push_back( Coord( x, y ) );
+				tmp->sign = '.';
+			}
+			else if( c == '1' )
+			{
+				mainCharacterPath[0] = Coord( x, y );
+				tmp->sign = '.';
+			}
+			else if( c == '2' )
+			{
+				mainCharacterPath[1] = Coord( x, y );
+				tmp->sign = '.';
+			}
+			else if( c == '3' )
+			{
+				mainCharacterPath[2] = Coord( x, y );
+				tmp->sign = '.';
+			}
+			else if( c == '=' )
+			{
+				doors.push_back( Coord( x, y ) );
 				tmp->sign = '.';
 			}
 
@@ -99,6 +123,7 @@ bool Map::Load( string file, Player *player, MainCharacter *mainc )
 		}
 		y++;
 	}
+	doorsOpen = false;
 
 	return true;
 }
@@ -127,6 +152,59 @@ void Map::Draw( WINDOW *window, Coord offset )
 						          (*e)->location.x+1+offset.x,
 											(*e)->sign );
 	}
+
+	if( !doorsOpen )
+	{
+	  vector<Coord>::iterator d;
+		for( d = doors.begin();
+				 d != doors.end();
+				 d++ )
+		{
+			mvwaddch( window, (*d).y+offset.y,
+												(*d).x+1+offset.x,
+												'=' );
+		}
+	}
 }
 
+
+
+void Map::GenerateMonster( Coord loc )
+{
+	NPC *npc = new NPC();
+	npc->name = "Monster";
+	npc->location = loc;
+	npc->sign = 'e';
+	npc->hostile = true;
+	npc->alive = true;
+	npc->AIFunction = MonsterAI;
+	npcs.push_back( npc );
+}
+
+
+
+void Map::SpawnMonsters( int count )
+{
+	for( int i=0; i<count; i++ )
+	{
+		Coord tmp = monsterSpawns[rand()%monsterSpawns.size()-1];
+		if( IsMovable( tmp ) )
+			GenerateMonster( tmp );
+		else i--;
+	}
+}
+
+
+
+void Map::OpenDoors()
+{
+	doorsOpen = true;
+}
+
+
+
+void Map::CloseDoors()
+{
+	doorsOpen = false;
+}
 

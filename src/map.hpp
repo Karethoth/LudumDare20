@@ -28,11 +28,20 @@ class Map
  public:
 	vector<Tile*> tiles;
 	vector<NPC*>  npcs;
+	Coord					mainCharacterPath[3];
+	vector<Coord> monsterSpawns;
+	vector<Coord> doors;
+	bool					doorsOpen;
 
 	bool Load( string file, Player *player, MainCharacter *mainc );
 	void Clear();
 
 	void Draw( WINDOW *window, Coord offset );
+	void GenerateMonster( Coord );
+	void SpawnMonsters( int count );
+
+	void OpenDoors();
+	void CloseDoors();
 
 	~Map();
 };
