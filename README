@@ -1,2 +1,12 @@
-Repository for my Ludum Dare 20 entry.
-Let's see if I get done anything at all.
+In the lack of a better name, this game shall be called simply "c".
+c is my entry to the Ludum Dare 20 compo.
+
+It is short, it is a bit buggy. I just didn't have enough time to finish it well.
+Code is ugly, builded on hacks and not documented. You've been warned.
+
+Dependencies are:
+On linux: libncurses
+On windows(using mingw): libpdcurses
+
+
+Feel free to drop an email to karethoth@gmail.com, if you want to contact me.
