@@ -1,18 +1,22 @@
 #include "pathfinding.hpp"
 
-int _abs( int a )
+unsigned int _abs( int a )
 {
 	if( a < 0 )
 		return 0-a;
-	return a;
+	return 0+a;
 }
 
-int Heuristic( Coord a, Coord b )
+
+
+unsigned int Heuristic( Coord a, Coord b )
 {
-	int A = _abs( b.x - a.x );
-	int B = _abs( b.y - b.y );
+	unsigned int A = _abs( b.x - a.x );
+	unsigned int B = _abs( b.y - a.y );
 	return A+B;
 }
+
+
 
 vector<Coord> Neighbours( Coord a )
 {

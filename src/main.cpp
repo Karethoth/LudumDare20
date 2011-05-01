@@ -20,6 +20,27 @@ MainCharacter *mainCharacter;
 Coord  screenSize;
 Map    map;
 MessageBox messageBox;
+bool gameOver = false;
+
+
+
+void Attack( Entity *attacker, Entity *defender )
+{
+	messageBox.message = attacker->name+" attacks "+defender->name+"!";
+	messageBox.Draw();
+	if( defender->stats.hp >= attacker->stats.str )
+			defender->stats.hp -= attacker->stats.str;
+	else
+			defender->stats.hp = 0;
+
+	if( defender->stats.hp == 0 )
+	{
+		messageBox.message = defender->name+" dies!";
+		messageBox.Draw();
+		defender->alive = false;
+	}
+}
+
 
 
 bool IsMovable( Coord tgt )
@@ -58,6 +79,7 @@ bool IsMovable( Coord tgt )
 }
 
 
+
 void Intro()
 {
 	MessageBox msgBox;
@@ -70,6 +92,33 @@ void Intro()
 	getch();
 	curs_set( 0 );
 	noecho();
+}
+
+
+
+void PlayerDied()
+{
+	messageBox.message = "You died. You have given your life to the mission, but you won't see how it ends.";
+	messageBox.Draw();
+	gameOver = true;
+}
+
+
+
+void MainCharacterDied()
+{
+	messageBox.message = "The hero has died. You failed at your mission.";
+	messageBox.Draw();
+	gameOver = true;
+}
+
+
+
+void EndGame()
+{
+	messageBox.Draw();
+	wrefresh( messageBox.window );
+	getch();
 }
 
 
@@ -132,14 +181,50 @@ void Update( int input )
 		if( IsMovable( newCoord ) )
 				player->location = newCoord;
 	}
-	mainCharacter->AIFunction( mainCharacter );
+
+	if( mainCharacter )
+		mainCharacter->AIFunction( mainCharacter );
 
 	vector<NPC*>::iterator e;
 	for( e = map.npcs.begin();
-			 e != map.npcs.end();
+			 e < map.npcs.end();
 			 e++ )
 	{
-		(*e)->AIFunction( (*e) );
+		if( !(*e) )
+		{
+			map.npcs.erase( e );
+			continue;
+		}
+
+		if( (*e)->alive == false )
+		{
+			(*e)->Die();
+			map.npcs.erase( e );
+			continue;
+		}
+
+		if( (*e)->AIFunction )
+		{
+			(*e)->AIFunction( (*e) );
+		}
+	}
+
+	if( !player->alive )
+	{
+		PlayerDied();
+	}
+
+	if( mainCharacter )
+		if( !mainCharacter->alive )
+		{
+			MainCharacterDied();
+			delete mainCharacter;
+			mainCharacter = 0;
+		}
+
+	if( gameOver )
+	{
+		EndGame();
 	}
 }
 
@@ -157,6 +242,9 @@ int main( int argc, char **argv )
 	init_pair( 1, COLOR_GREEN, COLOR_BLACK );
 
 	player = new Player();
+	player->name ="Player";
+	player->alive = true;
+
 	mainCharacter = new MainCharacter();
 
 	getmaxyx( stdscr, screenSize.y, screenSize.x );
@@ -175,6 +263,7 @@ int main( int argc, char **argv )
 	if( !map.Load( string("map.dat"), player, mainCharacter ) )
 			std::cout << "Couldn't load the map!";
 
+	mainCharacter->name = "Hero";
 	mainCharacter->AIFunction = MainCharacterAI;
 	mainCharacter->sign = '@';
 	map.npcs.push_back( (NPC*)mainCharacter );
@@ -198,6 +287,9 @@ int main( int argc, char **argv )
 				break;
 
 		Update( input );
+
+		if( gameOver )
+			break;
 	}
 
 	endwin();

@@ -13,17 +13,21 @@ using std::string;
 class Entity
 {
  public:
+	Entity(){};
 	virtual ~Entity(){};
 
 	string name;
 	Coord  location;
+	Coord  goal;
 	Stats  stats;
+	bool   alive;
 
 	int    sign;
 	int		 color;
 
 	virtual void Move( Direction d );
 	virtual void Draw();
+	virtual void Die();
 };
 
 #endif

@@ -11,8 +11,6 @@
 class Player : public Entity
 {
  public:
-	Stats  stats;
-
 	Player();
 };
 

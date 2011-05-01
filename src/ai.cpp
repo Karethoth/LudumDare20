@@ -3,14 +3,18 @@
 
 void MainCharacterAI( NPC *me )
 {
-	Coord tgt;
-
-	if( me->location.x != 1 ||
-			me->location.y != 1 )
+	if( me->location.x != me->goal.x ||
+			me->location.y != me->goal.y )
 	{
-		Direction d = NextMove( me->location, Coord( 1, 1 ) );
+		Direction d = NextMove( me->location, me->goal );
 		me->location = DirectionToCoord( me->location, d );
 	}
+	//else
+	//{
+	//	clear();
+	//	map.Clear();
+	//	map.Load( "map2.dat", player, mainCharacter );
+	//}
 }
 
 
@@ -22,7 +26,6 @@ void StationaryNPCAI( NPC *me )
 
 void FollowPlayerAI( NPC *me )
 {
-	// Very buggy, usually just blocks player
 	Coord tgt = player->location;
 	// A hack to make this work.
 	player->location = Coord( 0, 0 );
@@ -43,6 +46,50 @@ void FollowPlayerAI( NPC *me )
 			max = 1;
 		int next = rand() % max;
 		me->location = neighbours.at( next );
+	}
+}
+
+
+
+void MonsterAI( NPC *me )
+{
+	if( !me->alive )
+	{
+		return;
+	}
+
+	if( me->hostile )
+	{
+		// Check who's closer, main character or player
+		int deltaMain = Heuristic( me->location, mainCharacter->location );
+		int deltaPlayer = Heuristic( me->location, player->location );
+
+		// Side note: this might lead to some interesting behaviour..
+		Coord target = deltaPlayer <= deltaMain ? player->location : mainCharacter->location;
+		Entity *targetEntity = deltaPlayer <= deltaMain ? (Entity*)player : mainCharacter;
+
+		// If we can attack the target..
+		if( Heuristic( me->location, target ) <= me->stats.attackRange )
+		{
+				Attack( me, targetEntity );
+		}
+
+		// If we can't attack, move closer if we can see the player
+		else
+		{
+			me->goal = target;
+
+			if( Heuristic( me->location, target ) <= me->stats.sight )
+			{
+				targetEntity->location = Coord( 0,0 );
+				Direction d = NextMove( me->location, target );
+				me->location = DirectionToCoord( me->location, d );
+				targetEntity->location = target;
+			}
+		}
+	}
+	else
+	{
 	}
 }
 

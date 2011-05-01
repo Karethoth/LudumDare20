@@ -39,7 +39,7 @@ struct CoordNode
 };
 
 
-int Heuristic( Coord a, Coord b );
+unsigned int Heuristic( Coord a, Coord b );
 vector<Coord> Neighbours( Coord a );
 Direction NextMove( Coord a, Coord b );
 

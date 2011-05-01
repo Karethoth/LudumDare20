@@ -2,10 +2,11 @@
 
 Player::Player()
 {
-	location = Coord( 0,0 );
-	stats.maxhp = 30;
-	stats.hp = 30;
-	stats.str = 12;
+	location = Coord(0,0);
+	name = "Player";
+	stats.maxhp = 64;
+	stats.hp = 64;
+	stats.str = 6;
 }
 
 

@@ -7,15 +7,15 @@
 class NPC : public Entity
 {
  public:
+	NPC();
 	virtual ~NPC(){};
 
 	bool hostile;
-	bool AIEnabled;
+	NPCType type;
 
-	bool (*IsMovable)( Coord );
 	void (*AIFunction)( NPC* );
 
-	//NPCType type;
+	void Die();
 };
 
 #endif

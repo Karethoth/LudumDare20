@@ -11,5 +11,13 @@ enum Direction
 	west
 };
 
+
+enum NPCType
+{
+	unknown=0,
+	hero,
+	monster
+};
+
 #endif
 

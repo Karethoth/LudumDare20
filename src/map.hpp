@@ -13,6 +13,8 @@
 #include "player.hpp"
 #include "npc.hpp"
 #include "maincharacter.hpp"
+
+class Map;
 #include "ai.hpp"
 
 using std::string;
@@ -28,6 +30,7 @@ class Map
 	vector<NPC*>  npcs;
 
 	bool Load( string file, Player *player, MainCharacter *mainc );
+	void Clear();
 
 	void Draw( WINDOW *window, Coord offset );
 

@@ -2,6 +2,11 @@
 
 Map::~Map()
 {
+	Clear();
+}
+
+void Map::Clear()
+{
 	vector<Tile*>::iterator t;
 	for( t = tiles.begin();
 			 t != tiles.end();
@@ -9,6 +14,17 @@ Map::~Map()
 	{
 		delete *t;
 	}
+	tiles.clear();
+
+	vector<NPC*>::iterator n;
+	for( n = npcs.begin();
+			 n != npcs.end();
+			 n++ )
+	{
+		if( (*n)->type != hero )
+			delete *n;
+	}
+	npcs.clear();
 }
 
 
@@ -40,17 +56,38 @@ bool Map::Load( string file, Player *player, MainCharacter *mainc )
 			}
 			else if( c == '@' )
 			{
+					mainc->type = hero;
 					mainc->location = Coord( x, y );
 					tmp->sign = '.';
 			}
 			else if( c == 'm' )
 			{
 					NPC *npc = new NPC();
+					npc->name = "Monk";
 					npc->location = Coord( x, y );
 					npc->sign = 'm';
+					npc->hostile = false;
+					npc->alive = true;
 					npc->AIFunction = FollowPlayerAI;
 					npcs.push_back( npc );
 					tmp->sign = '.';
+			}
+			else if( c == 'e' )
+			{
+					NPC *npc = new NPC();
+					npc->name = "Monster";
+					npc->location = Coord( x, y );
+					npc->sign = 'e';
+					npc->hostile = true;
+					npc->alive = true;
+					npc->AIFunction = MonsterAI;
+					npcs.push_back( npc );
+					tmp->sign = '.';
+			}
+			else if( c == '!' )
+			{
+				mainc->goal = Coord( x, y );
+				tmp->sign = '.';
 			}
 
 			if( tmp->sign == '.' )
