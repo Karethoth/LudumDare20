@@ -24,7 +24,7 @@ bool gameOver = false;
 GameState gameState = intro;
 int round = 0;
 bool spawned = false;
-
+int monsterCount=0;
 
 
 int IntroOver()
@@ -77,6 +77,9 @@ void Attack( Entity *attacker, Entity *defender )
 		messageBox.message = defender->name+" dies!";
 		messageBox.Draw();
 		defender->alive = false;
+		if( defender->hostile )
+			monsterCount--;
+		defender->hostile = false;
 	}
 }
 
@@ -170,6 +173,7 @@ void Intro()
 	msgBox.Init( Coord( 0, 0 ), screenSize );
 	msgBox.message = "\"It's dangerous to go alone. Take this player with you.\"";
 	msgBox.Draw();
+	refresh();
 	wrefresh( msgBox.window );
 	getch();
 }
@@ -196,9 +200,23 @@ void MainCharacterDied()
 
 void EndGame()
 {
+	// Messages..
+	messageBox.message = "Game is over. Yes, it's over already. Have a nice day!";
 	messageBox.Draw();
 	wrefresh( messageBox.window );
-	getch();
+	gameOver = true;
+}
+
+
+
+void Outro()
+{
+	// Messages..
+	map.OpenDoors();
+	// Moar messages..
+	mainCharacter->AIFunction = MainCharacterAI;
+	mainCharacter->goal = map.mainCharacterPath[2];
+	gameState = endGame;
 }
 
 
@@ -210,18 +228,22 @@ Direction KeyToDirection( int key )
 	switch( key )
 	{
 		case 'k':
+		case KEY_UP:
 			d = north;
 			break;
 
 		case 'l':
+		case KEY_RIGHT:
 			d = east;
 			break;
 
 		case 'j':
+		case KEY_DOWN:
 			d = south;
 			break;
 
 		case 'h':
+		case KEY_LEFT:
 			d = west;
 			break;
 
@@ -278,6 +300,7 @@ void Update( int input )
 		if( (*e)->alive == false )
 		{
 			(*e)->Die();
+			delete (*e);
 			map.npcs.erase( e );
 			continue;
 		}
@@ -308,8 +331,36 @@ void Update( int input )
 
 	if( round && !spawned )
 	{
-		map.SpawnMonsters( 3 );
+		map.SpawnMonsters( 1 );
 		spawned = true;
+	}
+	else if( spawned )
+	{
+		if( map.MonstersDead() || monsterCount < 1 )
+		{
+			messageBox.message = "More monsters..";
+			messageBox.Draw();
+			switch( round )
+			{
+				case 1:
+					round++;
+					map.SpawnMonsters( 3 );
+					break;
+				case 2:
+					round++;
+					map.SpawnMonsters( 5 );
+					break;
+				case 3:
+					round++;
+					map.SpawnMonsters( 8 );
+					break;
+				case 4:
+					messageBox.message = "Monsters are dead.. For good this time.";
+					messageBox.Draw();
+					Outro();
+					break;
+			}
+		}
 	}
 }
 
@@ -322,6 +373,7 @@ int main( int argc, char **argv )
 	initscr();
 	noecho();
 	curs_set( 0 );
+	keypad( stdscr, true );
 
 	start_color();
 	init_pair( 1, COLOR_GREEN, COLOR_BLACK );
@@ -342,7 +394,7 @@ int main( int argc, char **argv )
 	messageBox.Init( Coord(0,0), Coord( screenSize.x, MESSAGEBOX_HEIGHT ) );
 	refresh();
 	messageBox.Draw();
-	wprintw( messageBox.window, "You're now the companion of the main character!\n|Protect him! Use h,j,k,l keys to move!" );
+	wprintw( messageBox.window, "You're now the companion of the main character!\n|Protect him! Use the arrow keys or h,j,k,l keys to move!" );
 	wrefresh( messageBox.window );
 
 	if( !map.Load( string("map.dat"), player, mainCharacter ) )
@@ -354,6 +406,7 @@ int main( int argc, char **argv )
 
 	mainCharacter->name = "Prince";
 	mainCharacter->hostile = false;
+	mainCharacter->alive = true;
 	mainCharacter->goal = map.mainCharacterPath[0];
 	mainCharacter->AIFunction = MainCharacterAI;
 	mainCharacter->sign = '@';
@@ -382,6 +435,8 @@ int main( int argc, char **argv )
 		if( gameOver )
 			break;
 	}
+
+	getch();
 
 	endwin();
 	return 0;

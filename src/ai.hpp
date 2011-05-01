@@ -22,6 +22,7 @@ extern GameState gameState;
 
 extern int IntroOver();
 extern int StartMainGame();
+extern void EndGame();
 
 void MainCharacterAI( NPC *me );
 void StationaryNPCAI( NPC *me );

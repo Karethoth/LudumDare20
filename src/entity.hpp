@@ -21,6 +21,7 @@ class Entity
 	Coord  goal;
 	Stats  stats;
 	bool   alive;
+	bool   hostile;
 
 	int    sign;
 	int		 color;

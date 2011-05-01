@@ -171,6 +171,8 @@ void Map::Draw( WINDOW *window, Coord offset )
 
 void Map::GenerateMonster( Coord loc )
 {
+	if( !IsMovable( loc ) )
+		return;
 	NPC *npc = new NPC();
 	npc->name = "Monster";
 	npc->location = loc;
@@ -187,11 +189,32 @@ void Map::SpawnMonsters( int count )
 {
 	for( int i=0; i<count; i++ )
 	{
-		Coord tmp = monsterSpawns[rand()%monsterSpawns.size()-1];
+		Coord tmp = monsterSpawns[i];
 		if( IsMovable( tmp ) )
+		{
 			GenerateMonster( tmp );
-		else i--;
+			monsterCount++;
+		}
+		Draw( window, Coord(0,0) );
 	}
+}
+
+
+
+bool Map::MonstersDead()
+{
+	vector<NPC*>::iterator n;
+	for( n = npcs.begin();
+			 n != npcs.end();
+			 n++ )
+	{
+		if( (*n)->hostile )
+		{
+			if( (*n)->alive && (*n)->name == "Monster" )
+				return false;
+		}
+	}
+	return true;
 }
 
 

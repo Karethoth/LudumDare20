@@ -21,6 +21,10 @@ void MainCharacterAI( NPC *me )
 			if( StartMainGame() )
 				me->waypoint++;
 		}
+		else if( me->waypoint == 2 )
+		{
+			EndGame();
+		}
 	}
 	else
 	{

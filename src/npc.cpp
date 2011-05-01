@@ -3,8 +3,8 @@
 
 NPC::NPC()
 {
-	alive = true;
-	hostile = true;
+	alive = false;
+	hostile = false;
 	waypoint = 0;
 }
 

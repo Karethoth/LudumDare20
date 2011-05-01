@@ -21,7 +21,8 @@ using std::string;
 using std::vector;
 
 extern bool IsMovable( Coord );
-
+extern WINDOW *window;
+extern int monsterCount;
 
 class Map
 {
@@ -35,10 +36,11 @@ class Map
 
 	bool Load( string file, Player *player, MainCharacter *mainc );
 	void Clear();
-
 	void Draw( WINDOW *window, Coord offset );
+
 	void GenerateMonster( Coord );
 	void SpawnMonsters( int count );
+	bool MonstersDead();
 
 	void OpenDoors();
 	void CloseDoors();
