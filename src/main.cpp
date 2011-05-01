@@ -82,6 +82,35 @@ void Attack( Entity *attacker, Entity *defender )
 
 
 
+void PlayerAttack( Coord tgt )
+{
+	NPC *target = 0;
+	vector<NPC*>::iterator e;
+	for( e = map.npcs.begin();
+			 e != map.npcs.end();
+			 e++ )
+	{
+		if( (*e)->location.x == tgt.x &&
+				(*e)->location.y == tgt.y )
+		{
+			target = *e;
+			break;
+		}
+	}
+	
+	if( target )
+		if( target->hostile )
+		{
+			Attack( player, target );
+		}
+		else
+		{
+			// You don't want to do that..
+		}
+}
+
+
+
 bool IsMovable( Coord tgt )
 {
 	vector<Tile*>::iterator t;
@@ -139,7 +168,7 @@ void Intro()
 {
 	MessageBox msgBox;
 	msgBox.Init( Coord( 0, 0 ), screenSize );
-	msgBox.message = "\"It's dangerous to go alone. Take this.\"";
+	msgBox.message = "\"It's dangerous to go alone. Take this player with you.\"";
 	msgBox.Draw();
 	wrefresh( msgBox.window );
 	getch();
@@ -230,7 +259,9 @@ void Update( int input )
 	{
 		Coord newCoord = DirectionToCoord( player->location, d );
 		if( IsMovable( newCoord ) )
-				player->location = newCoord;
+			player->location = newCoord;
+		else
+			PlayerAttack( newCoord );
 	}
 
 	vector<NPC*>::iterator e;
@@ -321,7 +352,8 @@ int main( int argc, char **argv )
 		return 1;
 	}
 
-	mainCharacter->name = "Hero";
+	mainCharacter->name = "Prince";
+	mainCharacter->hostile = false;
 	mainCharacter->goal = map.mainCharacterPath[0];
 	mainCharacter->AIFunction = MainCharacterAI;
 	mainCharacter->sign = '@';
