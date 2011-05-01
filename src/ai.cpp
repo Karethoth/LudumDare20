@@ -23,6 +23,12 @@ void MainCharacterAI( NPC *me )
 		}
 		else if( me->waypoint == 2 )
 		{
+			messageBox.message[0] = "King: That's a good son. You'll make a great king someday.";
+			messageBox.message[2] = "->";
+			messageBox.Draw();
+			refresh();
+			wrefresh( messageBox.window );
+			getch();
 			EndGame();
 		}
 	}

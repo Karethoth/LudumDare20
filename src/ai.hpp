@@ -10,6 +10,7 @@
 #include "map.hpp"
 #include "pathfinding.hpp"
 #include "player.hpp"
+#include "messagebox.hpp"
 
 extern void Attack( Entity*, Entity* );
 extern Coord DirectionToCoord( Coord, Direction );
@@ -19,6 +20,7 @@ extern Player *player;
 extern MainCharacter *mainCharacter;
 extern Map map;
 extern GameState gameState;
+extern MessageBox messageBox;
 
 extern int IntroOver();
 extern int StartMainGame();

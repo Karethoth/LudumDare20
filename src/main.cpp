@@ -29,10 +29,13 @@ int monsterCount=0;
 
 int IntroOver()
 {
-	// messages here
-	// open the path
+	messageBox.message[0] = "Prince: \"Hey, you. Come with me.\"";
+	messageBox.Draw();
+	refresh();
+	wrefresh( messageBox.window );
+
 	map.OpenDoors();
-	// moar messages
+
 	// continue
 	mainCharacter->goal = map.mainCharacterPath[1];
 	return 1;
@@ -44,9 +47,14 @@ int StartMainGame()
 {
 	if( player->location.y > mainCharacter->location.y )
 	{
-		// messages..
 		map.CloseDoors();
-		// messages..
+
+		messageBox.Clear();
+		messageBox.message[0] = "Prince: \"I-I'll j-just follow you.. Please?\"";
+		messageBox.Draw();
+		refresh();
+		wrefresh( messageBox.window );
+
 		// continue
 		gameState = mainGame;
 		round = 1;
@@ -54,9 +62,10 @@ int StartMainGame()
 	}
 	else
 	{
-		// message
-	  messageBox.message = "";
-	  messageBox.Draw();
+		messageBox.message[0] = "Prince: \"C-come on.. You may go in first.\"";
+		messageBox.Draw();
+		refresh();
+		wrefresh( messageBox.window );
 	}
 	return 0;
 }
@@ -65,7 +74,7 @@ int StartMainGame()
 
 void Attack( Entity *attacker, Entity *defender )
 {
-	messageBox.message = attacker->name+" attacks "+defender->name+"!";
+	messageBox.message[0] = attacker->name+" attacks "+defender->name+"!";
 	messageBox.Draw();
 	if( defender->stats.hp >= attacker->stats.str )
 			defender->stats.hp -= attacker->stats.str;
@@ -74,7 +83,7 @@ void Attack( Entity *attacker, Entity *defender )
 
 	if( defender->stats.hp == 0 )
 	{
-		messageBox.message = defender->name+" dies!";
+		messageBox.message[0] = defender->name+" dies!";
 		messageBox.Draw();
 		defender->alive = false;
 		if( defender->hostile )
@@ -171,7 +180,9 @@ void Intro()
 {
 	MessageBox msgBox;
 	msgBox.Init( Coord( 0, 0 ), screenSize );
-	msgBox.message = "\"It's dangerous to go alone. Take this player with you.\"";
+	msgBox.message[0] = "\"Son, it's time for you to show me what you're made of. Slay";
+	msgBox.message[1] = " some monsters in the dungeon. Yes, it's dangerous to go alone,";
+	msgBox.message[2] = " so take the player with you. He is in the next room waiting.\"",
 	msgBox.Draw();
 	refresh();
 	wrefresh( msgBox.window );
@@ -182,7 +193,7 @@ void Intro()
 
 void PlayerDied()
 {
-	messageBox.message = "You died. You have given your life to the mission, but you won't see how it ends.";
+	messageBox.message[0] = "You died. You have given your life to the mission, but you won't see how it ends.";
 	messageBox.Draw();
 	gameOver = true;
 }
@@ -191,7 +202,7 @@ void PlayerDied()
 
 void MainCharacterDied()
 {
-	messageBox.message = "The hero has died. You failed at your mission.";
+	messageBox.message[0] = "The hero has died. You failed at your mission.";
 	messageBox.Draw();
 	gameOver = true;
 }
@@ -201,7 +212,8 @@ void MainCharacterDied()
 void EndGame()
 {
 	// Messages..
-	messageBox.message = "Game is over. Yes, it's over already. Have a nice day!";
+	messageBox.message[0] = "Game is over. Yes, it's over already.";
+	messageBox.message[1] = "Thanks for playing, have a nice day!";
 	messageBox.Draw();
 	wrefresh( messageBox.window );
 	gameOver = true;
@@ -211,9 +223,9 @@ void EndGame()
 
 void Outro()
 {
-	// Messages..
 	map.OpenDoors();
-	// Moar messages..
+	messageBox.message[0] = "Prince: \"Finally it's over! I'm out of here.\"";
+	messageBox.Draw();
 	mainCharacter->AIFunction = MainCharacterAI;
 	mainCharacter->goal = map.mainCharacterPath[2];
 	gameState = endGame;
@@ -338,7 +350,7 @@ void Update( int input )
 	{
 		if( map.MonstersDead() || monsterCount < 1 )
 		{
-			messageBox.message = "More monsters..";
+			messageBox.message[0] = "More monsters..";
 			messageBox.Draw();
 			switch( round )
 			{
@@ -348,14 +360,14 @@ void Update( int input )
 					break;
 				case 2:
 					round++;
-					map.SpawnMonsters( 5 );
+					map.SpawnMonsters( 6 );
 					break;
 				case 3:
 					round++;
 					map.SpawnMonsters( 8 );
 					break;
 				case 4:
-					messageBox.message = "Monsters are dead.. For good this time.";
+					messageBox.message[0] = "Monsters are dead.. For good this time.";
 					messageBox.Draw();
 					Outro();
 					break;
@@ -391,11 +403,6 @@ int main( int argc, char **argv )
 	box( window, 0, 0 );
 	wborder( window, '|', '|', ' ', '-', '|', '|', '+', '+' );
 
-	messageBox.Init( Coord(0,0), Coord( screenSize.x, MESSAGEBOX_HEIGHT ) );
-	refresh();
-	messageBox.Draw();
-	wprintw( messageBox.window, "You're now the companion of the main character!\n|Protect him! Use the arrow keys or h,j,k,l keys to move!" );
-	wrefresh( messageBox.window );
 
 	if( !map.Load( string("map.dat"), player, mainCharacter ) )
 	{
@@ -411,6 +418,30 @@ int main( int argc, char **argv )
 	mainCharacter->AIFunction = MainCharacterAI;
 	mainCharacter->sign = '@';
 	map.npcs.push_back( (NPC*)mainCharacter );
+
+	map.Draw( window, Coord( 0, 0 ) );
+	wrefresh( window );
+
+	messageBox.Init( Coord(0,0), Coord( screenSize.x, MESSAGEBOX_HEIGHT ) );
+	messageBox.message[0] = "Prince: Do I really have to?";
+	messageBox.message[2] = "->";
+	messageBox.Draw();
+	refresh();
+	wrefresh( messageBox.window );
+
+	getch();
+	messageBox.message[0] = "King: If you want to sit on this throne in the future, yes.";
+	messageBox.message[2] = "->";
+	messageBox.Draw();
+	refresh();
+	wrefresh( messageBox.window );
+
+	getch();
+	messageBox.message[0] = "Prince: Ugh... Well I'll go then.";
+	messageBox.message[2] = "->";
+	messageBox.Draw();
+	refresh();
+	wrefresh( messageBox.window );
 
 	while( true )
 	{
@@ -430,6 +461,7 @@ int main( int argc, char **argv )
 		if( input == 'q' )
 				break;
 
+		messageBox.Clear();
 		Update( input );
 
 		if( gameOver )

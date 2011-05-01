@@ -18,9 +18,10 @@ class MessageBox
 
 	void Init( Coord, Coord );
 
-	string message;
+	string message[4];
 	void Draw();
 	void Clear();
+	void Line( int, string );
 };
 
 #endif
