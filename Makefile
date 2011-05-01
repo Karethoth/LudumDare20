@@ -2,8 +2,8 @@ CC = g++
 
 EXEC = c
 
-CFLAGS = -g -Wall -c -I /usr/include/ncurses
-LFLAGS = -g -lstdc++ -lncurses
+CFLAGS = -Wall -c -I /usr/include/ncurses
+LFLAGS = -lstdc++ -lncurses
 
 SRCS = $(wildcard src/*.cpp)
 OBJS = $(patsubst %,obj/%,$(subst src/,,$(SRCS:.cpp=.o)))
